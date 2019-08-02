@@ -13,7 +13,9 @@ CyberPatriot Scripts created for personal use. Not authorized for use by other t
 5. Manage groups inn accordance with the README
 	* Add group `addgroup $group`
 	* Delete group `delgroup $user`
-6. Do package updates and upgrades
+6. Remove unwanted packages with `apt-get purge $package` or by using the GUI
+7. Do package updates and upgrades
 	1. `apt-get update`
 	2. `apt-get upgrade`
-7. Run `sudo ./unix.sh`
+8. Update the kernel with `apt-get install linux-image-$(uname -r)`
+9. Run `sudo ./unix.sh`
