@@ -43,6 +43,9 @@ function copy() {
    echo $* | xclip -selection c
 }
 
+#Get the directory of the script
+SCRIPT_DIR="$(dirname "$0")"
+
 #Install xclip for copying text
 apt-get install xclip
 
@@ -82,7 +85,7 @@ echo_status "[Disabling IP Forwarding]"
 echo 0 | sudo tee /proc/sys/net/ipv4/ip_forward
 echo_status "[Preventing IP Spoofing]"
 echo "nospoof on" | sudo tee -a /etc/host.conf
-pause "Press ENTER to continue"
+pause "[Press ENTER to continue]"
 
 #User audits
 clear
@@ -93,10 +96,10 @@ auditctl -e 1
 echo_status "[Backing up audit.rules file]"
 mv /etc/audit/audit.rules /etc/audit/audit.rules.bak
 echo_status "[Copying best practices audit.rules file into /etc/audit/]"
-cp ./lib/auditd/audit.rules /etc/audit
-echo_status "[Starting auditd service]"
-service auditd start
-pause "Press ENTER to continue"
+cp $SCRIPT_DIR/lib/auditd/audit.rules /etc/audit
+echo_status "[Restarting auditd service]"
+service auditd restart
+pause "[Press ENTER to continue]"
 
 #Guest user disable
 line_add_msg
@@ -106,3 +109,4 @@ echo -e "${RED}${LINES}${R}\n"
 gedit /etc/lightdm/lightdm.conf
 pause This change requires logging out. Make sure important  work is saved and closed, then press ENTER to log out now
 restart lightdm
+
