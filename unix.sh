@@ -48,11 +48,11 @@ apt-get install xclip
 
 #Password policy
 line_change_msg
-echo -e "PASS_MAX_DAYS ${RED}90${R}\nPASS_MIN_DAYS ${RED}7${R}\nPASS_WARN_AGE ${RED}7${R}\n"
+echo -e "PASS_MAX_DAYS ${RED}90${R}\nPASS_MIN_DAYS ${RED}7${R}\nPASS_WARN_AGE ${RED}14${R}\n"
 gedit_at_line /etc/login.defs ^\s*PASS_MAX_DAYS
 clear
 
-pause "[Press ENTER to install pam_cracklib]"
+echo_status "[Installing pam_cracklib]"
 apt-get install libpam-cracklib
 line_change_msg
 echo -e "... pam_unix.so... ${RED}remember=5 minlen=8${R}"
@@ -82,6 +82,21 @@ echo_status "[Disabling IP Forwarding]"
 echo 0 | sudo tee /proc/sys/net/ipv4/ip_forward
 echo_status "[Preventing IP Spoofing]"
 echo "nospoof on" | sudo tee -a /etc/host.conf
+pause "Press ENTER to continue"
+
+#User audits
+clear
+echo_status "[Installing auditd]"
+apt-get install auditd
+echo_status "[Enabling audits]"
+auditctl -e 1
+echo_status "[Backing up audit.rules file]"
+mv /etc/audit/audit.rules /etc/audit/audit.rules.bak
+echo_status "[Copying best practices audit.rules file into /etc/audit/]"
+cp ./lib/auditd/audit.rules /etc/audit
+echo_status "[Starting auditd service]"
+service auditd start
+pause "Press ENTER to continue"
 
 #Guest user disable
 line_add_msg
