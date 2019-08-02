@@ -39,12 +39,16 @@ function gedit_at_line() {
    gedit $1 +$(grep $2 -m 1 -n $1 | cut -f1 -d:)
 }
 
+function copy() {
+   echo $* | xclip -selection c
+}
+
 #Install xclip for copying text
 apt-get install xclip
 
 #Password policy
 line_change_msg
-echo -e "PASS_MAX_DAYS ${RED}90${R}\nPASS_MIN_DAYS ${RED}7${R}\nPASS_WARN_AGE ${RED}7${R}"
+echo -e "PASS_MAX_DAYS ${RED}90${R}\nPASS_MIN_DAYS ${RED}7${R}\nPASS_WARN_AGE ${RED}7${R}\n"
 gedit_at_line /etc/login.defs ^\s*PASS_MAX_DAYS
 clear
 
@@ -52,18 +56,18 @@ pause "[Press ENTER to install pam_cracklib]"
 apt-get install libpam-cracklib
 line_change_msg
 echo -e "... pam_unix.so... ${RED}remember=5 minlen=8${R}"
-echo -e "... pam_cracklib.so... ${RED}ucredit=-1 lcredit=-1 dcredit=-1 ocredit=-1${R}"
+echo -e "... pam_cracklib.so... ${RED}ucredit=-1 lcredit=-1 dcredit=-1 ocredit=-1${R}\n"
 gedit /etc/pam.d/common-password
 
 line_add_msg
 LINES="auth required pam_tally2.so deny=5 onerr=fail unlock_time=1800"
-echo $LINES | xclip -selection c
-echo -e "${RED}${LINES}${R}"
+copy $LINES
+echo -e "${RED}${LINES}${R}\n"
 gedit /etc/pam.d/common-auth
 
 #SSH
 line_change_msg
-echo -e "PermitRootLogin ${RED}no${R}"
+echo -e "PermitRootLogin ${RED}no${R}\n"
 gedit_at_line /etc/ssh/sshd_config ^\s*PermitRootLogin
 clear
 
@@ -78,3 +82,12 @@ echo_status "[Disabling IP Forwarding]"
 echo 0 | sudo tee /proc/sys/net/ipv4/ip_forward
 echo_status "[Preventing IP Spoofing]"
 echo "nospoof on" | sudo tee -a /etc/host.conf
+
+#Guest user disable
+line_add_msg
+LINES="allow-guest=false"
+copy $LINES
+echo -e "${RED}${LINES}${R}\n"
+gedit /etc/lightdm/lightdm.conf
+pause This change requires logging out. Make sure important  work is saved and closed, then press ENTER to log out now
+restart lightdm
