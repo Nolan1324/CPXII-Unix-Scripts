@@ -1,5 +1,5 @@
 # CPXII-Scripts
-CyberPatriot Scripts created for personal use. Not authorized for use by other teams.
+CyberPatriot scripts/checklists created by a CyberPatriot student (me) for my team's personal use. Not authorized for use by other teams.
 ## UNIX
 1. Read the README
 2. Do all forensics questions
@@ -19,3 +19,7 @@ CyberPatriot Scripts created for personal use. Not authorized for use by other t
 	2. `apt-get upgrade`
 8. Update the kernel with `apt-get install linux-image-$(uname -r)`
 9. Run `sudo ./unix.sh`
+
+## Credits
+* [lib/auditd](lib/auditd) cloned from https://github.com/Neo23x0/auditd
+* [suppress_gedit.sh](suppress_gedit.sh) adapted from https://askubuntu.com/a/572827
