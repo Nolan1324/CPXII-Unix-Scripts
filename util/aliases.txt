@@ -1,0 +1,17 @@
+
+#########
+# Aliases
+#########
+
+alias lss="sudo ls -lhA"
+alias fhere="sudo find . -name " #Parameter: file path
+alias ffile="sudo find / -type f -name " #Parameter: file path
+alias ps="ps aux"
+alias psg="ps aux | grep -v grep | grep -i -e VSZ -e" #Parameter: process name
+alias killall="killall -9 " #Parameter: process name
+alias ports="sudo ss -ln"
+alias servicels "service --status-all"
+
+alias cd..="cd .."
+alias ..="cd .."
+alias cls="clear"
