@@ -49,21 +49,38 @@ echo_status "[Disabling IP Forwarding]"
 echo 0 | sudo tee /proc/sys/net/ipv4/ip_forward
 echo_status "[Preventing IP Spoofing]"
 echo "nospoof on" | sudo tee -a /etc/host.conf
-pause "[Press ENTER to continue]"
+pause_general
 
 #User audits
-clear
 echo_status "[Installing auditd]"
 apt-get install auditd
 echo_status "[Enabling audits]"
 auditctl -e 1
-echo_status "[Backing up audit.rules file]"
-mv /etc/audit/audit.rules /etc/audit/audit.rules.bak
+AUDIT_BAK="/etc/audit/audit.rules.bak"
+if [ ! -f $AUDIT_BAK ]; then
+   echo_status "[Backing up audit.rules file]"
+   mv /etc/audit/audit.rules $AUDIT_BAK  
+fi
 echo_status "[Copying best practices audit.rules file into /etc/audit/]"
 cp $SCRIPT_DIR/lib/auditd/audit.rules /etc/audit
 echo_status "[Restarting auditd service]"
 service auditd restart
-pause "[Press ENTER to continue]"
+pause_general
+
+#RootKit Protection 1
+echo_status "[Installing chkrootkit]"
+apt-get install chkrootkit
+pause_general
+chkrootkit | tee chkrootkit.txt
+pause_general
+
+#RootKit Protection 2
+echo_status "[Installing and running rkhunter]"
+apt-get install rkhunter
+rkhunter --update
+pause_general
+rkhunter --check
+pause_general
 
 #Guest user disable
 line_add_msg

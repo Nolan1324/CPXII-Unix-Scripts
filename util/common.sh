@@ -25,6 +25,11 @@ function pause() {
    read -p "[33m$*[0m: "
 }
 
+function pause_general() {
+   pause "[Press ENTER to continue]"
+   clear
+}
+
 #Opens a file in gedit at the first line that matches the grep pattern
 #$1 File path
 #$2 Line grep pattern
