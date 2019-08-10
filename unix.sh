@@ -15,7 +15,7 @@ apt-get install xclip
 
 #Password policy
 line_change_msg
-echo -e "PASS_MAX_DAYS ${RED}90${R}\nPASS_MIN_DAYS ${RED}7${R}\nPASS_WARN_AGE ${RED}14${R}\n"
+echo -e "PASS_MAX_DAYS ${RED}60${R}\nPASS_MIN_DAYS ${RED}7${R}\nPASS_WARN_AGE ${RED}14${R}\n"
 gedit_at_line /etc/login.defs ^\s*PASS_MAX_DAYS
 clear
 
