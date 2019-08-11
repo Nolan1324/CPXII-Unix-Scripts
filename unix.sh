@@ -10,9 +10,6 @@ SCRIPT_DIR="$(dirname "$0")"
 
 . "$SCRIPT_DIR/util/common.sh"
 
-#Install xclip for copying text
-apt-get install xclip
-
 #Password policy
 line_change_msg
 echo -e "PASS_MAX_DAYS ${RED}60${R}\nPASS_MIN_DAYS ${RED}7${R}\nPASS_WARN_AGE ${RED}14${R}\n"
