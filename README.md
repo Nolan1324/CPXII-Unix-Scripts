@@ -28,10 +28,10 @@ CyberPatriot scripts/checklists created by a CyberPatriot student (me) for my te
 10. Update the kernel with `apt-get install linux-image-$(uname -r)`
 11. Audit system crontabs in `/etc/crontab` and user crontabs using `crontab -e -u $user` (or in `/var/spool/cron/crontabs/$user`)
 12. Audit permissions and contents of home directories and system files using `ls -lA`. It is good to know what most of the core system files contain and do to save time during competition. Some **examples** of cor system files:
-	`/etc/rc.local`
-	`/etc/login.defs`
-	`/etc/crontabs`
-	`/etc/sysctl.conf` - Configures the kernel. Hardening: https://www.cyberciti.biz/faq/linux-kernel-etcsysctl-conf-security-hardening/
+	* `/etc/rc.local`
+	* `/etc/login.defs`
+	* `/etc/crontabs`
+	* `/etc/sysctl.conf` - Configures the kernel. Hardening: https://www.cyberciti.biz/faq/linux-kernel-etcsysctl-conf-security-hardening/
 	* `/etc/passwd` - Users
 	* `/etc/shadow` - Password hashes
 	* `/etc/group` - Groups
