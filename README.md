@@ -22,5 +22,5 @@ CyberPatriot scripts/checklists created by a CyberPatriot student (me) for my te
 
 ## Credits
 * [lib/auditd](lib/auditd) cloned from https://github.com/Neo23x0/auditd
-* [suppress_gedit.sh](suppress_gedit.sh) adapted from https://askubuntu.com/a/572827
+* [util/suppress_gedit.sh](util/suppress_gedit.sh) adapted from https://askubuntu.com/a/572827
 * [util/aliases.txt](/util/aliases.txt) adapted from https://www.digitalocean.com/community/tutorials/an-introduction-to-useful-bash-aliases-and-functions

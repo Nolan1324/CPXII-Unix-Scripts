@@ -1,4 +1,7 @@
-. suppress_gedit.sh
+#Get the directory of the script
+SCRIPT_DIR="$(dirname "$0")"
+
+. $SCRIPT_DIR/util/suppress_gedit.sh
 
 #Variables that change the color of text when used in echo -e
 R='\033[0m' #Reset color
