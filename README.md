@@ -41,7 +41,6 @@ CyberPatriot scripts/checklists created by a CyberPatriot student (me) for my te
 	* `/etc/apt/sources.list`
 	* `/etc/securetty` - If the file does not exists, root can use any terminal. This is a potential security vulnerability).
 	* `/etc/apt/apt.conf.d/10periodic`
-	```
 
 ## Scripts
 * [init.sh](init.sh) Run this first. Installs xcopy (used by other scripts) and sets up aliases
