@@ -20,6 +20,12 @@ CyberPatriot scripts/checklists created by a CyberPatriot student (me) for my te
 8. Update the kernel with `apt-get install linux-image-$(uname -r)`
 9. Run `sudo ./unix.sh`
 
+##Scripts
+* [init.sh](init.sh) Run this first. Installs xcopy (used by other scripts) and sets up aliases
+* [basic.sh](basic.sh) Standard security fixes
+* [audit_setup.sh](audit_setup.sh) Setup and run auditd with a best practices rules file
+* [rookit_scan.sh](rootkit_scan.sh) Install chkrookit and rkhunter and check for rootkits.
+
 ## Credits
 * [lib/auditd](lib/auditd) cloned from https://github.com/Neo23x0/auditd
 * [util/suppress_gedit.sh](util/suppress_gedit.sh) adapted from https://askubuntu.com/a/572827
