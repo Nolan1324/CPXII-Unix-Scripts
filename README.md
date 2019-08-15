@@ -12,19 +12,42 @@ CyberPatriot scripts/checklists created by a CyberPatriot student (me) for my te
 	* Change users who should or should not be administrator
 5. Manage groups inn accordance with the README
 	* Add group `addgroup $group`
-	* Delete group `delgroup $user`
-6. Remove unwanted packages with `apt-get purge $package` or by using the GUI
-7. Do package updates and upgrades
+	* Delete group `delgroup $group`
+6. Aduit `/etc/sudoers` (look for people who should not have sudo)
+7. Update mirrors in `/etc/apt/sources.list` by adding these lines:
+	```
+	deb mirror://mirrors.ubuntu.com/mirrors.txt xenial main restricted universe multiverse
+	deb mirror://mirrors.ubuntu.com/mirrors.txt xenial-updates main restricted universe multiverse
+	deb mirror://mirrors.ubuntu.com/mirrors.txt xenial-backports main restricted universe multiverse
+	deb mirror://mirrors.ubuntu.com/mirrors.txt xenial-security main restricted universe multiverse
+	```
+8. Remove unwanted packages with `apt-get purge $package` or by using the GUI
+9. Update package list and upgrade installed packages
 	1. `apt-get update`
 	2. `apt-get upgrade`
-8. Update the kernel with `apt-get install linux-image-$(uname -r)`
-9. Run `sudo ./unix.sh`
+10. Update the kernel with `apt-get install linux-image-$(uname -r)`
+11. Audit system crontabs in `/etc/crontab` and user crontabs using `crontab -e -u $user` (or in `/var/spool/cron/crontabs/$user`)
+12. Audit permissions and contents of home directories and system files using `ls -lA`. It is good to know what most of the core system files contain and do to save time during competition. Some **examples** of cor system files:
+	`/etc/rc.local`
+	`/etc/login.defs`
+	`/etc/crontabs`
+	`/etc/sysctl.conf` - Configures the kernel. Hardening: https://www.cyberciti.biz/faq/linux-kernel-etcsysctl-conf-security-hardening/
+	* `/etc/passwd` - Users
+	* `/etc/shadow` - Password hashes
+	* `/etc/group` - Groups
+	* `/etc/sudoers` - Who can use sudo
+	* `/var/log/*` - System logs
+	* `/etc/hosts` - This should exist, but be empty
+	* `/etc/apt/sources.list`
+	* `/etc/securetty` - If the file does not exists, root can use any terminal. This is a potential security vulnerability).
+	* `/etc/apt/apt.conf.d/10periodic`
+	```
 
 ## Scripts
 * [init.sh](init.sh) Run this first. Installs xcopy (used by other scripts) and sets up aliases
 * [basic.sh](basic.sh) Standard security fixes
 * [audit_setup.sh](audit_setup.sh) Setup and run auditd with a best practices rules file
-* [rookit_scan.sh](rootkit_scan.sh) Install chkrookit and rkhunter and check for rootkits.
+* [rookit_scan.sh](rootkit_scan.sh) Install chkrookit and rkhunter and check for rootkits
 
 ## Credits
 * [lib/auditd](lib/auditd) cloned from https://github.com/Neo23x0/auditd
