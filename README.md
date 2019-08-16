@@ -30,14 +30,14 @@ CyberPatriot scripts/checklists created by a CyberPatriot student (me) for my te
 12. Audit permissions and contents of home directories and system files using `ls -lA`. It is good to know what most of the core system files contain and do to save time during competition. Some **examples** of cor system files:
 	* `/etc/rc.local`
 	* `/etc/login.defs`
-	* `/etc/crontabs`
+	* `/etc/crontab`
 	* `/etc/sysctl.conf` - Configures the kernel. Hardening: https://www.cyberciti.biz/faq/linux-kernel-etcsysctl-conf-security-hardening/
 	* `/etc/passwd` - Users
 	* `/etc/shadow` - Password hashes
 	* `/etc/group` - Groups
 	* `/etc/sudoers` - Who can use sudo
-	* `/var/log/*` - System logs
-	* `/etc/hosts` - This should exist, but be empty except for some standard lines (ex: 127.0.0.1 localhost). If unsure, just look up the default contents on Google and copy/paste into the file.
+	* `/var/log/*` - System logs. Usually all readable by everyone except for `auth.log*`, `btmp*`, `dmesg`, `kern.log*`, `syslog*`, and `ufw.log*` (list everyone readable files with `ls -lA | grep "^\-......r.."`)
+	* `/etc/hosts` - This should exist, but be empty except for some standard lines (ex: `127.0.0.1 localhost`). If unsure, just look up the [default contents](https://askubuntu.com/a/880272) on Google and copy/paste into the file.
 	* `/etc/apt/sources.list`
 	* `/etc/securetty` - If the file does not exists, root can use any terminal. This is a potential security vulnerability.
 	* `/etc/apt/apt.conf.d/10periodic` - https://qznc.github.io/my-homeserver/hardening.html#automatic-security-updates. Add (or edit) the following lines:
