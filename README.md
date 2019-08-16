@@ -37,10 +37,16 @@ CyberPatriot scripts/checklists created by a CyberPatriot student (me) for my te
 	* `/etc/group` - Groups
 	* `/etc/sudoers` - Who can use sudo
 	* `/var/log/*` - System logs
-	* `/etc/hosts` - This should exist, but be empty
+	* `/etc/hosts` - This should exist, but be empty except for some standard lines (ex: 127.0.0.1 localhost). If unsure, just look up the default contents on Google and copy/paste into the file.
 	* `/etc/apt/sources.list`
 	* `/etc/securetty` - If the file does not exists, root can use any terminal. This is a potential security vulnerability.
-	* `/etc/apt/apt.conf.d/10periodic`
+	* `/etc/apt/apt.conf.d/10periodic` - https://qznc.github.io/my-homeserver/hardening.html#automatic-security-updates. Add (or edit) the following lines:
+		```
+		APT::Periodic::Update-Package-Lists "1";
+		APT::Periodic::Download-Upgradeable-Packages "1";
+		APT::Periodic::AutocleanInterval "7";
+		APT::Periodic::Unattended-Upgrade "1";
+		```
 
 ## Scripts
 * [init.sh](init.sh) Run this first. Installs xcopy (used by other scripts) and sets up aliases
