@@ -35,17 +35,22 @@ echo -e "PermitRootLogin ${RED}no${R}\n"
 gedit_at_line /etc/ssh/sshd_config ^\s*PermitRootLogin
 clear
 
-#Network
+#Other
 echo_status "[Enabing the firewall]"
 sudo ufw enable
 echo_status "[Enabling syn cookie protection]"
 sysctl -n net.ipv4.tcp_syncookies
+echo 1 | sudo tee /proc/sys/net/ipv4/tcp_syncookies #Probably do not need both
 echo_status "[Disabling IPv6 (Potentially harmful)]"
 echo "net.ipv6.conf.all.disable_ipv6 = 1" | sudo tee -a /etc/sysctl.conf
 echo_status "[Disabling IP Forwarding]"
 echo 0 | sudo tee /proc/sys/net/ipv4/ip_forward
 echo_status "[Preventing IP Spoofing]"
 echo "nospoof on" | sudo tee -a /etc/host.conf
+echo_status "[Disabling SysRq Key]"
+echo 0 | sudo tee /proc/sys/kernel/sysrq
+echo_status "[Enabling RFC 1337]"
+echo 1 | sudo tee /proc/sys/net/ipv4/tcp_rfc1337
 pause_general
 
 #Guest user disable
@@ -54,6 +59,6 @@ LINES="allow-guest=false"
 copy $LINES
 echo -e "${RED}${LINES}${R}\n"
 gedit /etc/lightdm/lightdm.conf
-pause "This change requires logging out. Make sure important  work is saved and closed, then press ENTER to log out now"
+pause "This change requires logging out. Make sure important work is saved and closed, then press ENTER to log out now"
 restart lightdm
 
