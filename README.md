@@ -16,6 +16,7 @@ CyberPatriot scripts/checklists created by a CyberPatriot student (me) for my te
 6. Aduit `/etc/sudoers` (look for people who should not have sudo)
 7. Update mirrors in `/etc/apt/sources.list` by adding these lines:
 	```
+	deb http://security.ubuntu.com/ubuntu/
 	deb mirror://mirrors.ubuntu.com/mirrors.txt xenial main restricted universe multiverse
 	deb mirror://mirrors.ubuntu.com/mirrors.txt xenial-updates main restricted universe multiverse
 	deb mirror://mirrors.ubuntu.com/mirrors.txt xenial-backports main restricted universe multiverse
