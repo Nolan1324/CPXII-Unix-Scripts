@@ -10,7 +10,7 @@ SCRIPT_DIR="$(dirname "$0")"
 
 . "$SCRIPT_DIR/util/common.sh"
 
-#Systcl
+#Netowrk 
 echo_status "3.1.1 Ensure IP forwarding is disabled"
 echo "net.ipv4.ip_forward=0" | sudo tee -a /etc/sysctl.conf
 echo "net.ipv4.route.flush=1" | sudo tee -a /etc/sysctl.conf
@@ -54,6 +54,38 @@ echo "net.ipv6.conf.all.accept_redirects=0" | sudo tee -a /etc/sysctl.conf
 echo "net.ipv6.conf.default.accept_redirects=0" | sudo tee -a /etc/sysctl.conf
 echo "net.ipv6.route.flush=1" | sudo tee -a /etc/sysctl.conf
 sudo sysctl -p
+
+#System Maintenance
+echo_status "6.1.2 Ensure permissions on /etc/passwd are configured"
+chown root:root /etc/passwd
+chmod 644 /etc/passwd
+echo_status "6.1.3 Ensure permissions on /etc/shadow are configured"
+chown root:shadow /etc/shadow
+chmod o-rwx,g-wx /etc/shadow
+echo_status "6.1.4 Ensure permissions on /etc/group are configured"
+chown root:root /etc/group
+chmod 644 /etc/group
+echo_status "6.1.5 Ensure permissions on /etc/gshadow are configured"
+chown root:shadow /etc/gshadow
+chmod o-rwx,g-rw /etc/gshadow
+echo_status "6.1.6 Ensure permissions on /etc/passwd- are configured"
+chown root:root /etc/passwd-
+chmod u-x,go-wx /etc/passwd-
+echo_status "6.1.7 Ensure permissions on /etc/shadow- are configured"
+chown root:root /etc/shadow-
+chown root:shadow /etc/shadow-
+chmod o-rwx,g-rw /etc/shadow-
+echo_status "6.1.8 Ensure permissions on /etc/group- are configured"
+chown root:root /etc/group-
+chmod u-x,go-wx /etc/group-
+echo_status "6.1.9 Ensure permissions on /etc/gshadow- are configured"
+chown root:root /etc/gshadow-
+chown root:shadow /etc/gshadow-
+chmod o-rwx,g-rw /etc/gshadow-
+
+echo_status "6.2.1 Ensure password fields are not empty"
+cat /etc/shadow | awk -F: '($2 == "" ) { print $1 " does not have a password "}'
+pause "Manually provide these users strong passwords then press [Enter]"
 
 echo_status "6.2.9 Ensure users own their home directories"
 cat /etc/passwd | egrep -v '^(root|halt|sync|shutdown)' | awk -F: '($7 != "/usr/sbin/nologin" && $7 != "/bin/false") { print $1 " " $6 }' | while read user dir; do
