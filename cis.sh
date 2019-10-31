@@ -55,8 +55,7 @@ echo "net.ipv6.conf.default.accept_redirects=0" | sudo tee -a /etc/sysctl.conf
 echo "net.ipv6.route.flush=1" | sudo tee -a /etc/sysctl.conf
 
 echo_status "6.2.9 Ensure users own their home directories"
-cat /etc/passwd | egrep -v '^(root|halt|sync|shutdown)' | awk -F: '($7 !=
-"/usr/sbin/nologin" && $7 != "/bin/false") { print $1 " " $6 }' | while read user dir; do
+cat /etc/passwd | egrep -v '^(root|halt|sync|shutdown)' | awk -F: '($7 != "/usr/sbin/nologin" && $7 != "/bin/false") { print $1 " " $6 }' | while read user dir; do
 if [ ! -d "$dir" ]; then
   echo "The home directory ($dir) of user $user does not exist."
 else
