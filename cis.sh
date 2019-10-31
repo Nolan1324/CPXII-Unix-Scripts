@@ -53,6 +53,7 @@ echo "net.ipv6.route.flush=1" | sudo tee -a /etc/sysctl.conf
 echo "net.ipv6.conf.all.accept_redirects=0" | sudo tee -a /etc/sysctl.conf
 echo "net.ipv6.conf.default.accept_redirects=0" | sudo tee -a /etc/sysctl.conf
 echo "net.ipv6.route.flush=1" | sudo tee -a /etc/sysctl.conf
+sudo sysctl -p
 
 echo_status "6.2.9 Ensure users own their home directories"
 cat /etc/passwd | egrep -v '^(root|halt|sync|shutdown)' | awk -F: '($7 != "/usr/sbin/nologin" && $7 != "/bin/false") { print $1 " " $6 }' | while read user dir; do
@@ -65,9 +66,9 @@ else
   fi
 fi
 done
-pause "Manually change incorrect ownerships then press [Enter] to continue"
+pause "Manually change incorrect ownerships then press [Enter]"
 
 echo_status "6.2.20 Ensure shadow group is empty"
 grep ^shadow:[^:]*:[^:]*:[^:]+ /etc/group
 awk -F: '($4 == "<shadow-gid>") { print }' /etc/passwd
-pause If anyone is in shadow, remove them hit [Enter]
+pause "If anyone is in shadow, remove them then press [Enter]"
