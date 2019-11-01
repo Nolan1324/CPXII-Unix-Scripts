@@ -131,7 +131,6 @@ fi
 shift
 done
 pause "[PAUSED] Fix any issues listed"
-
 echo_status "6.2.7-12 User home directory auditing"
 cat /etc/passwd | egrep -v '^(root|halt|sync|shutdown)' | awk -F: '($7 != "/usr/sbin/nologin" && $7 != "/bin/false") { print $1 " " $6 }' | while read user dir; do
 if [ ! -d "$dir" ]; then
@@ -163,16 +162,16 @@ else
     if [ `echo $fileperm | cut -c9` != "-" ]; then
      echo "Other Write permission set on file $file"
     fi
-   done
-   if [ ! -h "$dir/.forward" -a -f "$dir/.forward" ]; then
-    echo ".forward file $dir/.forward exists"
-   fi
-   if [ ! -h "$dir/.netrc" -a -f "$dir/.netrc" ]; then
-    echo ".netrc file $dir/.netrc exists"
-   fi
-   if [ ! -h "$file" -a -f "$file" ]; then
-    echo ".rhosts file in $dir"
-   fi
+    if [ ! -h "$file" -a -f "$file" ]; then
+     echo ".rhosts file in $dir"
+    fi
+  done
+  if [ ! -h "$dir/.forward" -a -f "$dir/.forward" ]; then
+   echo ".forward file $dir/.forward exists"
+  fi
+  if [ ! -h "$dir/.netrc" -a -f "$dir/.netrc" ]; then
+   echo ".netrc file $dir/.netrc exists"
+  fi
 fi
 done
 pause "[PAUSED] Fix any of the problems listed"
