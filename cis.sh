@@ -83,24 +83,92 @@ chown root:root /etc/gshadow-
 chown root:shadow /etc/gshadow-
 chmod o-rwx,g-rw /etc/gshadow-
 
+#User and Group Setting
 echo_status "6.2.1 Ensure password fields are not empty"
 cat /etc/shadow | awk -F: '($2 == "" ) { print $1 " does not have a password "}'
-pause "Manually provide these users strong passwords then press [Enter]"
+pause "[PAUSED] Provide these users strong passwords. \"passwd -l <username>\""
+echo_status "6.2.2 Ensure no legacy \"+\" entries exist in /etc/passwd"
+grep '^\+:' /etc/passwd
+echo_status "6.2.3 Ensure no legacy \"+\" entries exist in /etc/shadow"
+grep '^\+:' /etc/shadow
+echo_status "6.2.4 Ensure no legacy \"+\" entries exist in /etc/group"
+grep '^\+:' /etc/group
+pause "[PAUSED] Remove lines found in the files in 6.2.2-4"
+echo_status "6.2.5 Ensure root is the only UID 0 account"
+cat /etc/passwd | awk -F: '($3 == 0) { print $1 }'
+pause "[PAUSED] Change the UID of users listed other than root. \"usermod -u <new-uid> <username>\""
+echo_status "6.2.6 Ensure root PATH Integrity"
+if [ "`echo $PATH | grep :: `" != "" ]; then
+ echo "Empty Directory in PATH (::)"
+fi
+if [ "`echo $PATH | grep :$`" != "" ]; then
+echo "Trailing : in PATH"
+fi
+p=`echo $PATH | sed -e 's/::/:/' -e 's/:$//' -e 's/:/ /g'`
+set -- $p
+while [ "$1" != "" ]; do
+if [ "$1" = "." ]; then
+ echo "PATH contains ."
+ shift
+ continue
+fi
+if [ -d $1 ]; then
+ dirperm=`ls -ldH $1 | cut -f1 -d" "`
+ if [ `echo $dirperm | cut -c6 ` != "-" ]; then
+ echo "Group Write permission set on directory $1"
+ fi
+ if [ `echo $dirperm | cut -c9 ` != "-" ]; then
+ echo "Other Write permission set on directory $1"
+ fi
+ dirown=`ls -ldH $1 | awk '{print $3}'`
+ if [ "$dirown" != "root" ] ; then
+ echo $1 is not owned by root
+341 | P a g e
+ fi
+else
+ echo $1 is not a directory
+fi
+shift
+done
+pause "[PAUSED] Fix any issues listed"
 
-echo_status "6.2.9 Ensure users own their home directories"
+echo_status "6.2.7-9 Ensure all users' home directories exist, are permissions are 750 or more restrictive, and are owned by their own users"
 cat /etc/passwd | egrep -v '^(root|halt|sync|shutdown)' | awk -F: '($7 != "/usr/sbin/nologin" && $7 != "/bin/false") { print $1 " " $6 }' | while read user dir; do
 if [ ! -d "$dir" ]; then
   echo "The home directory ($dir) of user $user does not exist."
 else
+  dirperm=`ls -ld $dir | cut -f1 -d" "`
   owner=$(stat -L -c "%U" "$dir")
+  if [ `echo $dirperm | cut -c6` != "-" ]; then
+   echo "Group Write permission set on the home directory ($dir) of user $user"
+  fi
+  if [ `echo $dirperm | cut -c8` != "-" ]; then
+   echo "Other Read permission set on the home directory ($dir) of user $user"
+  fi
+  if [ `echo $dirperm | cut -c9` != "-" ]; then
+   echo "Other Write permission set on the home directory ($dir) of user $user"
+  fi
+  if [ `echo $dirperm | cut -c10` != "-" ]; then
+  echo "Other Execute permission set on the home directory ($dir) of user $user"
+  fi
   if [ "$owner" != "$user" ]; then
     echo "The home directory ($dir) of user $user is owned by $owner."
   fi
+  for file in $dir/.[A-Za-z0-9]*; do
+   if [ ! -h "$file" -a -f "$file" ]; then
+    fileperm=`ls -ld $file | cut -f1 -d" "`
+    if [ `echo $fileperm | cut -c6` != "-" ]; then
+      echo "Group Write permission set on file $file"
+    fi
+    if [ `echo $fileperm | cut -c9` != "-" ]; then
+     echo "Other Write permission set on file $file"
+    fi
+   done
 fi
 done
-pause "Manually change incorrect ownerships then press [Enter]"
+pause "[PAUSED] Fix any of the problems listed"
 
 echo_status "6.2.20 Ensure shadow group is empty"
 grep ^shadow:[^:]*:[^:]*:[^:]+ /etc/group
 awk -F: '($4 == "<shadow-gid>") { print }' /etc/passwd
-pause "If anyone is in shadow, remove them then press [Enter]"
+pause "[PAUSED] If anyone is in shadow, remove them"
