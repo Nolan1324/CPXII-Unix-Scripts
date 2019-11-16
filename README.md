@@ -48,6 +48,47 @@ CyberPatriot scripts/checklists created by a CyberPatriot student (me) for my te
 		APT::Periodic::AutocleanInterval "7";
 		APT::Periodic::Unattended-Upgrade "1";
 		```
+13. Other:
+	```
+	# Make shared memory read only
+	echo "none /run/shm tmpfs ro,noexec 0 0" > /etc/fstab
+	mount -a
+	# Change some settings
+	echo 0 > /proc/sys/kernel/sysrq
+	echo 1 > /proc/sys/net/ipv4/tcp_rfc1337
+	# Check this folder
+	/usr/sbin/<user>
+	MYSQL: /etc/mysql/my.cnf bind-address=localhost
+	PHP: /etc/php5/apache2/php.ini expose_php=0
+	```
+14. SSH (CIS 5.2)
+	```
+	chown root:root /etc/ssh/sshd_config
+	chmod og-rwx /etc/ssh/sshd_config
+	# Add or change these lines in /etc/ssh/sshd_config
+	Protocol 2
+	LogLevel INFO
+	X11Forwarding no
+	MaxAuthTries 4
+	IgnoreRhosts yes
+	HostbasedAuthentication no
+	PermitRootLogin no
+	PermitEmptyPasswords no
+	PermitUserEnvironment no
+	MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com
+	ClientAliveInterval 300
+	ClientAliveCountMax 0
+	LoginGraceTime 60
+	# Reload changes
+	service sshd reload
+	```
+15. Password lock (CIS 5.4.1.4)
+	```
+	useradd -D -f 30 # Sets default
+	chage --list <user>
+	chage --inactive 30 <user>
+	```
+	
 
 ## Scripts
 * [init.sh](init.sh) Run this first. Installs xcopy (used by other scripts) and sets up aliases
